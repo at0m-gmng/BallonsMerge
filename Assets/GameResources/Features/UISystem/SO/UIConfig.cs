@@ -23,6 +23,7 @@
     {
         Menu = 10,
         Game = 50,
+        Pause = 55,
         Result = 100
     }
 }

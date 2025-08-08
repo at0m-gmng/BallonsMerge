@@ -25,6 +25,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7a3ffa84f5e10c247b811244a6ba93dc
+    m_Address: Assets/GameResources/Prefabs/Windows/Pause_Window.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cc469306cb7d9634ab1315fc0db9b596
     m_Address: Assets/GameResources/Prefabs/Windows/Result_Window.prefab
     m_ReadOnly: 0

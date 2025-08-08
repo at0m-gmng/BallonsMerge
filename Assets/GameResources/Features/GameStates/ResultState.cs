@@ -15,10 +15,17 @@
         private readonly IGameStateMachine _gameStateMachine;
         private readonly IUISystem _uiSystem;
         
+        private ResultWindow _resultWindow = default;
+        
         public void Enter()
         {
             Debug.Log($"Enter {nameof(ResultState)}");
-            _uiSystem.ShowWindow(UIWindowID.Result);
+            _uiSystem.TryGetWindow(UIWindowID.Result, out _resultWindow);
+
+            _resultWindow.ButtonRestart.onClick.AddListener(OnRestartButtonClicked);
+            _resultWindow.ButtonMenu.onClick.AddListener(OnButtonMenuClicked);
+            
+            _uiSystem.ShowWindow(UIWindowID.Game);
         }
 
         public void Exit()
@@ -26,5 +33,12 @@
             _uiSystem.HideWindow(UIWindowID.Result);
             Debug.Log($"Exit {nameof(ResultState)}");
         }
+
+        private void OnRestartButtonClicked()
+        {
+            
+        }
+
+        private void OnButtonMenuClicked() => _gameStateMachine.Enter<MenuState>();
     }
 }

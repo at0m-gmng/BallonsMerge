@@ -29,9 +29,16 @@ MonoBehaviour:
       m_EditorAssetChanged: 0
     ID: 50
   - Reference:
-      m_AssetGUID: cc469306cb7d9634ab1315fc0db9b596
+      m_AssetGUID: 7a3ffa84f5e10c247b811244a6ba93dc
       m_SubObjectName: 
       m_SubObjectGUID: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
+    ID: 55
+  - Reference:
+      m_AssetGUID: cc469306cb7d9634ab1315fc0db9b596
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 1
     ID: 100
