@@ -13,20 +13,11 @@
         
         public override void InstallBindings()
         {
-            InstallConfigs();
             InstallControllers();
             InstallStateMachine();
         }
 
-        private void InstallConfigs()
-        {
-            Container.BindInstance(_uiConfig).IfNotBound();
-        }
-        
-        private void InstallControllers()
-        {
-            Container.BindInterfacesTo<UISystem>().AsSingle();
-        }
+        private void InstallControllers() => Container.BindInterfacesTo<UISystem>().AsSingle().WithArguments(_uiConfig);
 
         private void InstallStateMachine()
         {
