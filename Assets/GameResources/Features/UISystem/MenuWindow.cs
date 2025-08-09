@@ -9,6 +9,10 @@
         [Header("Buttons")]
         [field: SerializeField] public Button ButtonStart { get; private set; } = default;
 
+        [Header("Views")]
+        [SerializeField] private Text _recordField = default;
+
+        private string _recordFormat = "Record: {0}";
         private Sequence _buttonAnimation = null;
         
         private void Awake() => CreateButtonAnimation();
@@ -26,7 +30,9 @@
             _buttonAnimation.Rewind();
             base.Hide();
         }
-        
+
+        public void UpdateView(int record) => _recordField.text = string.Format(_recordFormat, record.ToString());
+
         private void CreateButtonAnimation()
         {
             _buttonAnimation = DOTween.Sequence();

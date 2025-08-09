@@ -89,7 +89,7 @@
                      }
                  }
 
-                 onEmptyZonesAreOver();
+                 onEmptyZonesAreOver?.Invoke();
              }
          }
 

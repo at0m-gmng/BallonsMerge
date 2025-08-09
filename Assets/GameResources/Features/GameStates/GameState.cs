@@ -1,4 +1,8 @@
-﻿namespace GameResources.Features.GameStates
+﻿using System;
+using GameResources.Features.PersistentProgress;
+using UniRx;
+
+namespace GameResources.Features.GameStates
 {
     using Core;
     using GameControllers;
@@ -8,18 +12,21 @@
 
     public sealed class GameState : IState
     {
-        public GameState(IGameStateMachine gameStateMachine, IUISystem uiSystem, GameFacade gameFacade)
+        public GameState(IGameStateMachine gameStateMachine, IUISystem uiSystem, GameFacade gameFacade, IPersistentListener persistentListener)
         {
             _gameStateMachine = gameStateMachine;
             _uiSystem = uiSystem;
             _gameFacade = gameFacade;
+            _persistentListener = persistentListener;
         }
         private readonly IGameStateMachine _gameStateMachine;
         private readonly IUISystem _uiSystem;
         private readonly GameFacade _gameFacade;
+        private readonly IPersistentListener _persistentListener;
         
         private GameWindow _gameWindow = default;
         private PauseWindow _pauseWindow = default;
+        private IDisposable _scoreChanged = null;
 
         public void Enter()
         {
@@ -34,12 +41,16 @@
             _pauseWindow.ButtonMenu.onClick.AddListener(OnButtonMenuClicked);
             
             _uiSystem.ShowWindow(UIWindowID.Game);
+            _scoreChanged = _persistentListener.Score.Subscribe(OnGameScoreChanged);
 
+            _gameFacade.GameEnded += OnGameEnded;
             _gameFacade.StartGame();
         }
 
         public void Exit()
         {
+            _scoreChanged.Dispose();
+            _gameFacade.GameEnded -= OnGameEnded;
             _gameFacade.StopGame();
             _gameWindow.ButtonPause.onClick.RemoveListener(OnButtonPauseClicked);
             _pauseWindow.ButtonContinue.onClick.RemoveListener(OnButtonContinueClicked);
@@ -57,10 +68,14 @@
 
         private void OnButtonContinueClicked()
         {
-            _gameFacade.StartGame();
+            _gameFacade.ContinueGame();
             _uiSystem.HideWindow(UIWindowID.Pause);
         }
         
         private void OnButtonMenuClicked() => _gameStateMachine.Enter<MenuState>();
+
+        private void OnGameScoreChanged(int score) => _gameWindow.UpdateView(score);
+
+        private void OnGameEnded() => _gameStateMachine.Enter<ResultState>();
     }
 }

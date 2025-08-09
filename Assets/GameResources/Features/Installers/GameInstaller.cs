@@ -1,4 +1,6 @@
-﻿using GameResources.Features.VFXEntities;
+﻿using GameResources.Features.PersistentProgress;
+using GameResources.Features.SaveLoadSystem;
+using GameResources.Features.VFXEntities;
 
 namespace GameResources.Features.Installers
 {
@@ -17,6 +19,7 @@ namespace GameResources.Features.Installers
     {
         [Header("Configs")]
         [SerializeField] private UIConfig _uiConfig = default;
+        [SerializeField] private ScoreConfig _scoreConfig = default;
         
         [Header("Controllers")]
         [SerializeField] private GameFacade _gameFacade = default;
@@ -33,6 +36,11 @@ namespace GameResources.Features.Installers
 
         private void InstallControllers()
         {
+            Container.BindInstance(_scoreConfig).IfNotBound();
+            
+            Container.BindInterfacesTo<SaveLoadService>().AsSingle();
+            Container.BindInterfacesTo<PersistentProgressService>().AsSingle();
+            
             Container.BindFactory<Quaternion, Vector3, VFXEntity, VFXFactory>()
                 .FromMonoPoolableMemoryPool(x => x.WithInitialSize(10)
                 .FromComponentInNewPrefab(_vfxEntity)

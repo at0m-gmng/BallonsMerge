@@ -186,6 +186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _uiConfig: {fileID: 11400000, guid: 76c6525e56f324e419e70fff786b378a, type: 2}
+  _scoreConfig: {fileID: 11400000, guid: 67fde18249797dc47928540cf58b5242, type: 2}
   _gameFacade: {fileID: 7223473678075743939}
   _baseEntity: {fileID: 7299563490190549900, guid: 94f63337fcec89d4db830f6fe54d10f7, type: 3}
   _vfxEntity: {fileID: 6510103509455801096, guid: e427e20af391eaf4aa5341beb15d95e2, type: 3}
