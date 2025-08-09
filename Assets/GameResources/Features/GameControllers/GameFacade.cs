@@ -2,25 +2,27 @@ using UnityEngine;
 
 namespace GameResources.Features.GameControllers
 {
-    using Pools;
+    using Factories;
     using Zenject;
+    using ZoneController;
 
     public sealed class GameFacade : MonoBehaviour
     {
         [Inject]
-        private void Construct(BallsPool ballsPool)
+        private void Construct(BallFactory ballFactory)
         {
-            _ballsPool = ballsPool;
+            _ballFactory = ballFactory;
         }
-        private BallsPool _ballsPool;
+        private BallFactory _ballFactory;
         
         [SerializeField] private Camera _camera = default;
         [SerializeField] private PendulumController _pendulumController = default;
-
+        [SerializeField] private ZoneController _zoneController = default;
 
         public void Initialize()
         {
-            _pendulumController.InitializeController(_ballsPool);
+            _pendulumController.InitializeController(_ballFactory);
+            _zoneController.InitializeController();
         }
         public void StartGame() => _pendulumController.StartGame();
         

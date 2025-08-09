@@ -2,25 +2,29 @@
 {
     using Core;
     using UnityEngine;
+    using Zenject;
     using Random = UnityEngine.Random;
 
     public sealed class BallEntity : BaseEntity
     {
-        public BallColor Color { get; private set; } = default;
-        // public IZoneEntity IsBelongsZone = null;
-
         [SerializeField] private float _liveTime = 5f;
 
         public override void Reset() => SetRandomColor();
 
-        public void SetRandomColor()
+        public override void OnSpawned(IMemoryPool pool)
         {
-            Color = (BallColor)Random.Range(0, 3);
-            spriteRenderer.color = Color switch
+            Reset();
+            base.OnSpawned(pool);
+        }
+
+        private void SetRandomColor()
+        {
+            Type = (EntityType)Random.Range(0, 3);
+            spriteRenderer.color = Type switch
             {
-                BallColor.Red => UnityEngine.Color.red,
-                BallColor.Blue => UnityEngine.Color.blue,
-                BallColor.Green => UnityEngine.Color.green,
+                EntityType.Red => UnityEngine.Color.red,
+                EntityType.Blue => UnityEngine.Color.blue,
+                EntityType.Green => UnityEngine.Color.green,
                 _ => UnityEngine.Color.white
             };
         }

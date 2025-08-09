@@ -1,10 +1,11 @@
 ﻿namespace GameResources.Features.Installers
 {
+    using Entities;
     using Entities.Core;
+    using Factories;
     using GameControllers;
     using GameStates;
     using GameStates.Core;
-    using Pools;
     using UISystem;
     using UISystem.SO;
     using UnityEngine;
@@ -29,10 +30,11 @@
 
         private void InstallControllers()
         {
-            Container.BindMemoryPool<BaseEntity, BallsPool>()
-                .WithInitialSize(15)
+            
+            Container.BindFactory<BallEntity, BallFactory>()
+                .FromMonoPoolableMemoryPool(x => x.WithInitialSize(15)
                 .FromComponentInNewPrefab(_baseEntity)
-                .UnderTransformGroup("BallsPool");
+                .UnderTransformGroup("BallsPool"));
             
             Container.BindInstance(_gameFacade).AsSingle();
             Container.BindInterfacesTo<UISystem>().AsSingle().WithArguments(_uiConfig);

@@ -1,9 +1,9 @@
 namespace GameResources.Features.GameControllers
 {
-    using System.Collections;
+    using Cysharp.Threading.Tasks;
     using DG.Tweening;
     using Entities.Core;
-    using Pools;
+    using Factories;
     using UnityEngine;
     using UnityEngine.EventSystems;
 
@@ -18,13 +18,14 @@ namespace GameResources.Features.GameControllers
         [SerializeField] 
         private float _ropeLength = 1f;
         
-        private BallsPool _ballsPool = default;
+        private BallFactory _ballsPool = default;
         private BaseEntity _currentBall = default;
         private Rigidbody2D _pendulumRigidbody = default;
         private Vector3 _spawnPosition = default;
         private bool _isInit = false;
+        private bool _isDropping = false;
         
-        public void InitializeController(BallsPool ballsPool)
+        public void InitializeController(BallFactory ballsPool)
         {
             _ballsPool = ballsPool;
 
@@ -39,9 +40,9 @@ namespace GameResources.Features.GameControllers
 
         private void LateUpdate()
         {
-            if (_isInit && !EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonUp(0))
+            if (_isInit && !EventSystem.current.IsPointerOverGameObject() && !_isDropping && Input.GetMouseButtonUp(0))
             {
-                DropBall();
+                DropBall().Forget();
             }
         }
         
@@ -65,7 +66,7 @@ namespace GameResources.Features.GameControllers
         private void SpawnBall()
         {
             _spawnPosition = transform.TransformPoint(Vector3.down * _ropeLength);
-            _currentBall = _ballsPool.Spawn(_ballsPool);
+            _currentBall = _ballsPool.Create();
             
             if (!_currentBall)
             {
@@ -86,22 +87,16 @@ namespace GameResources.Features.GameControllers
             _currentBall.Rigidbody2D.isKinematic = false;
         }
         
-        private IEnumerator SpawnBallWithDelay()
-        {
-            yield return new WaitForSeconds(0.1f);
-            SpawnBall();
-        }
-        
-        private void DropBall()
+        private async UniTask DropBall()
         {
             if (_currentBall != null)
             {
-                _currentBall.DistanceJoint2D.enabled = false;
-                _currentBall.Rigidbody2D.gravityScale = 1f;
-                _currentBall.transform.SetParent(null);
+                _isDropping = true;
+                _currentBall.Drop();
                 _currentBall = null;
-        
-                StartCoroutine(SpawnBallWithDelay());
+                await UniTask.Delay(100);
+                SpawnBall();
+                _isDropping = false;
             }
         }
     }

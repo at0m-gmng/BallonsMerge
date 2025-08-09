@@ -434,18 +434,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1879158137784437314
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7939447897919763382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1922357626696276330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,9 +446,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf44431f153dee744a1bf5d703627de9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swingAngle: 30
-  swingSpeed: 1
-  ropeLength: 1
+  _swingAngle: 30
+  _swingSpeed: 1
+  _ropeLength: 1
 --- !u!4 &2203591392418610090
 Transform:
   m_ObjectHideFlags: 0
@@ -541,9 +529,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3962063860586198342}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 160ae421dfce4b20b2b589749a026d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ballPrefab: {fileID: 7299563490190549900, guid: 94f63337fcec89d4db830f6fe54d10f7, type: 3}
+  _spriteRenderer: {fileID: 1837521795647336186}
 --- !u!61 &3143808563712361540
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -673,9 +663,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7154660876050520656}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 160ae421dfce4b20b2b589749a026d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ballPrefab: {fileID: 7299563490190549900, guid: 94f63337fcec89d4db830f6fe54d10f7, type: 3}
+  _spriteRenderer: {fileID: 6085590946674043746}
 --- !u!114 &4888450871648594819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -685,9 +677,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1127002383714064436}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 630b9cba931d4e2ab8a1f00bf4de8f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _zoneEntities:
+  - {fileID: 4358095769943061962}
+  - {fileID: 8108599814263225721}
+  - {fileID: 3071709148171724413}
 --- !u!4 &5133479463831333591
 Transform:
   m_ObjectHideFlags: 0
@@ -1062,6 +1058,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _camera: {fileID: 7806016068755622090}
   _pendulumController: {fileID: 1922357626696276330}
+  _zoneController: {fileID: 4888450871648594819}
 --- !u!212 &7282738426688404184
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1211,7 +1208,7 @@ GameObject:
   - component: {fileID: 2511948564492894238}
   - component: {fileID: 6480357358101836025}
   - component: {fileID: 6029675148860390429}
-  - component: {fileID: 1879158137784437314}
+  - component: {fileID: 7939447897919763383}
   m_Layer: 0
   m_Name: ReleaseTrigger
   m_TagString: Untagged
@@ -1219,6 +1216,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &7939447897919763383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7939447897919763382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3c220860a273a3418c941e6d9dad9c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8108599814263225721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1228,9 +1237,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2861602514526602586}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 160ae421dfce4b20b2b589749a026d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ballPrefab: {fileID: 7299563490190549900, guid: 94f63337fcec89d4db830f6fe54d10f7, type: 3}
+  _spriteRenderer: {fileID: 4065631161577542237}
 --- !u!50 &8541470809424625105
 Rigidbody2D:
   serializedVersion: 5
