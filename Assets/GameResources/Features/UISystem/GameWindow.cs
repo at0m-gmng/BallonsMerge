@@ -7,5 +7,6 @@
     {
         [Header("Buttons")]
         [field: SerializeField] public Button ButtonPause { get; set; } = default;
+        [field: SerializeField] public RawImage GraphicsTexture { get; set; } = default;
     }
 }

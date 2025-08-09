@@ -27,6 +27,8 @@
             _uiSystem.TryGetWindow(UIWindowID.Game, out _gameWindow);
             _uiSystem.TryGetWindow(UIWindowID.Pause, out _pauseWindow);
 
+            _gameWindow.GraphicsTexture.texture = _gameFacade.GraphicsTexture;
+            
             _gameWindow.ButtonPause.onClick.AddListener(OnButtonPauseClicked);
             _pauseWindow.ButtonContinue.onClick.AddListener(OnButtonContinueClicked);
             _pauseWindow.ButtonMenu.onClick.AddListener(OnButtonMenuClicked);
