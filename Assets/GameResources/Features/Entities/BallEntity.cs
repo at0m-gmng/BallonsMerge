@@ -1,14 +1,11 @@
 ﻿namespace GameResources.Features.Entities
 {
     using Core;
-    using UnityEngine;
     using Zenject;
     using Random = UnityEngine.Random;
 
     public sealed class BallEntity : BaseEntity
     {
-        [SerializeField] private float _liveTime = 5f;
-
         public override void Reset() => SetRandomColor();
 
         public override void OnSpawned(IMemoryPool pool)
