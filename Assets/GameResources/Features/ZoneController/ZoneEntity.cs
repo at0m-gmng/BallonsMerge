@@ -1,5 +1,7 @@
 ﻿namespace GameResources.Features.ZoneController
 {
+    using Factories;
+    using Zenject;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -12,6 +14,13 @@
 
     public sealed class ZoneEntity : MonoBehaviour
     {
+        [Inject]
+        private void Construct(VFXFactory vfxFactory)
+        {
+            _vfxFactory = vfxFactory;
+        }
+        private VFXFactory _vfxFactory;
+        
         private const int MAX_HEIGHT = 3;
 
         public event Action onZoneUpdated;
@@ -170,10 +179,7 @@
             await UniTask.Delay(TimeSpan.FromSeconds(sequence.Duration()));
         }
 
-        private void PlayParticleEffect(Vector3 position)
-        {
-            
-        }
-
+        private void PlayParticleEffect(Vector3 position) 
+            => _vfxFactory.Create(Quaternion.identity, transform.TransformPoint(position));
     }
 }

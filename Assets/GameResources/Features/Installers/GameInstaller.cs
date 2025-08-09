@@ -1,4 +1,6 @@
-﻿namespace GameResources.Features.Installers
+﻿using GameResources.Features.VFXEntities;
+
+namespace GameResources.Features.Installers
 {
     using Entities;
     using Entities.Core;
@@ -21,6 +23,7 @@
         
         [Header("Pools")]
         [SerializeField] private BaseEntity _baseEntity = default;
+        [SerializeField] private VFXEntity _vfxEntity = default;
         
         public override void InstallBindings()
         {
@@ -30,6 +33,10 @@
 
         private void InstallControllers()
         {
+            Container.BindFactory<Quaternion, Vector3, VFXEntity, VFXFactory>()
+                .FromMonoPoolableMemoryPool(x => x.WithInitialSize(10)
+                .FromComponentInNewPrefab(_vfxEntity)
+                .UnderTransformGroup("VFXPool"));
             
             Container.BindFactory<BallEntity, BallFactory>()
                 .FromMonoPoolableMemoryPool(x => x.WithInitialSize(15)
