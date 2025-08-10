@@ -16,6 +16,9 @@
          private Dictionary<ZoneEntity, List<BaseEntity>> _matchedLines = new Dictionary<ZoneEntity, List<BaseEntity>>();
          private Dictionary<ZoneEntity, List<BaseEntity>> _ballsToRemoveByZone = new Dictionary<ZoneEntity, List<BaseEntity>>();
          
+         private bool _isChecking = false;
+         private bool _recheckRequested = false;
+         
          private void OnDestroy()
          {
              for (int i = 0; i < _zoneEntities.Count; i++)
@@ -32,65 +35,104 @@
                  _zoneEntities[i].onZoneUpdated += CheckMatches;
              }
          }
+         
+         public void ClearAllFields()
+         {
+             _isChecking = false;
+             _recheckRequested = false;
+
+             _matchedLines.Clear();
+             _ballsToRemoveByZone.Clear();
+
+             if (_zoneEntities != null)
+             {
+                 for (int i = 0; i < _zoneEntities.Count; i++)
+                 {
+                     _zoneEntities[i].Clear();
+                 }
+             }
+         }
 
          private void CheckMatches()
          {
-             _ballsToRemoveByZone.Clear();
-             _matchedLines.Clear();
-
-             foreach (ZoneEntity zoneEntity in _zoneEntities)
+             if (_isChecking)
              {
-                 _ballsToRemoveByZone[zoneEntity] = new List<BaseEntity>();
-                 
-                 List<(List<BaseEntity> balls, EntityType color)> verticalMatches = GetVerticalMatches(zoneEntity);
-                 _ballsToRemoveByZone[zoneEntity].AddRange(verticalMatches.SelectMany(m => m.balls));
+                 _recheckRequested = true;
+                 return;
              }
 
-             int maxHeight = _zoneEntities.Max(z => z.GetBalls().Count);
-             for (int height = 0; height < maxHeight; height++)
+             _isChecking = true;
+             do
              {
-                 List<(List<BaseEntity> balls, EntityType color)> horizontalMatches = GetHorizontalMatches(height);
-                 foreach ((List<BaseEntity> balls, _) in horizontalMatches)
+                 _recheckRequested = false;
+
+                 Dictionary<ZoneEntity, List<BaseEntity>> ballsToRemoveByZone = new Dictionary<ZoneEntity, List<BaseEntity>>();
+
+                 foreach (ZoneEntity zoneEntity in _zoneEntities)
+                 {
+                     ballsToRemoveByZone[zoneEntity] = new List<BaseEntity>();
+
+                     List<(List<BaseEntity> balls, EntityType color)> verticalMatches = GetVerticalMatches(zoneEntity);
+                     ballsToRemoveByZone[zoneEntity].AddRange(verticalMatches.SelectMany(m => m.balls));
+                 }
+
+                 int maxHeight = _zoneEntities.Max(z => z.GetBalls().Count);
+                 for (int height = 0; height < maxHeight; height++)
+                 {
+                     List<(List<BaseEntity> balls, EntityType color)> horizontalMatches = GetHorizontalMatches(height);
+                     foreach ((List<BaseEntity> balls, _) in horizontalMatches)
+                     {
+                         foreach (BaseEntity ball in balls)
+                         {
+                             ZoneEntity zone = _zoneEntities.First(z => z.GetBalls().Contains(ball));
+                             ballsToRemoveByZone[zone].Add(ball);
+                         }
+                     }
+                 }
+
+                 List<(List<BaseEntity> balls, EntityType color)> diagonalMatches = GetDiagonalMatches();
+                 foreach ((List<BaseEntity> balls, _) in diagonalMatches)
                  {
                      foreach (BaseEntity ball in balls)
                      {
                          ZoneEntity zone = _zoneEntities.First(z => z.GetBalls().Contains(ball));
-                         _ballsToRemoveByZone[zone].Add(ball);
+                         ballsToRemoveByZone[zone].Add(ball);
                      }
                  }
-             }
 
-             List<(List<BaseEntity> balls, EntityType color)> diagonalMatches = GetDiagonalMatches();
-             foreach ((List<BaseEntity> balls, _) in diagonalMatches)
-             {
-                 foreach (BaseEntity ball in balls)
-                 {
-                     ZoneEntity zone = _zoneEntities.First(z => z.GetBalls().Contains(ball));
-                     _ballsToRemoveByZone[zone].Add(ball);
-                 }
-             }
+                 _ballsToRemoveByZone = ballsToRemoveByZone;
+                 _matchedLines = ballsToRemoveByZone.Where(kv => kv.Value.Count > 0).ToDictionary(kv => kv.Key, kv => kv.Value);
 
-             _matchedLines = _ballsToRemoveByZone.Where(kv => kv.Value.Count > 0).ToDictionary(kv => kv.Key, kv => kv.Value);
+                 List<KeyValuePair<ZoneEntity, List<BaseEntity>>> matchedSnapshot = _matchedLines.ToList();
 
-             if (_matchedLines.Count > 0)
-             {
-                 foreach (KeyValuePair<ZoneEntity, List<BaseEntity>> zone in _matchedLines)
+                 if (matchedSnapshot.Count > 0)
                  {
-                     onZoneUpdate?.Invoke(zone.Key, zone.Value);
-                 }
-             }
-             else
-             {
-                 for (int i = 0; i < _zoneEntities.Count; i++)
-                 {
-                     if (!_zoneEntities[i].IsFull)
+                     foreach (KeyValuePair<ZoneEntity, List<BaseEntity>> kv in matchedSnapshot)
                      {
-                         return;
+                         onZoneUpdate?.Invoke(kv.Key, kv.Value);
+                     }
+                 }
+                 else
+                 {
+                     bool anyNotFull = false;
+                     for (int i = 0; i < _zoneEntities.Count; i++)
+                     {
+                         if (!_zoneEntities[i].IsFull)
+                         {
+                             anyNotFull = true;
+                             break;
+                         }
+                     }
+
+                     if (!anyNotFull)
+                     {
+                         onEmptyZonesAreOver?.Invoke();
                      }
                  }
 
-                 onEmptyZonesAreOver?.Invoke();
-             }
+             } while (_recheckRequested);
+
+             _isChecking = false;
          }
 
          private List<(List<BaseEntity> balls, EntityType color)> GetVerticalMatches(ZoneEntity zone)

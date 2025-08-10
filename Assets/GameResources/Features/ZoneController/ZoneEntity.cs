@@ -33,6 +33,7 @@
         private ZoneController _zoneController = default;
         private List<BaseEntity> _balls = new List<BaseEntity>();
         private float _zoneBottomY = default;
+        private bool _isClearing = false;
 
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
 
@@ -60,6 +61,26 @@
         }
 
         public IReadOnlyList<BaseEntity> GetBalls() => _balls;
+        
+        public void Clear()
+        {
+            _isClearing = true;
+
+            for (int i = 0; i < _balls.Count; i++)
+            {
+                BaseEntity ball = _balls[i];
+                if (ball != null)
+                {
+                    DOTween.Kill(ball.transform);
+                    ball.IsBelongsZone = null;
+                    ball.ReturnToPool();
+                }
+            }
+
+            _balls.Clear();
+            onZoneUpdated?.Invoke();
+            _isClearing = false;
+        }
         
         private void HandleBallEnter(Collider2D other)
         {

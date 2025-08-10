@@ -62,7 +62,7 @@ namespace GameResources.Features.GameStates
 
         private void OnButtonPauseClicked()
         {
-            _gameFacade.StopGame();
+            _gameFacade.PauseGame();
             _uiSystem.ShowWindow(UIWindowID.Pause);
         }
 

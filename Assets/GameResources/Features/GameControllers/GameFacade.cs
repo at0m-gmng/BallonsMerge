@@ -61,8 +61,15 @@ namespace GameResources.Features.GameControllers
             _pendulumController.StartGame();
             _persistentListener.Score.Value = 0;
         }
-        public void StopGame() => _pendulumController.StopGame();
+        public void StopGame()
+        {
+            _pendulumController.StopGame();
+            _zoneController.ClearAllFields();
+        }
+
         public void ContinueGame() => _pendulumController.StartGame();
+        
+        public void PauseGame() => _pendulumController.StopGame();
         
         private void OnZoneUpdated(ZoneEntity zoneEntity, List<BaseEntity> balls)
         {
