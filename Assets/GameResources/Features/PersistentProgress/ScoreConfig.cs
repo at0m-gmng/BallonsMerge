@@ -11,10 +11,7 @@ namespace GameResources.Features.PersistentProgress
         [field: SerializeField]
         public List<BallScores> ScoresData { get; private set; } = new List<BallScores>();
 
-        public int GetScore(EntityType targetType)
-        {
-            return this.ScoresData.Find((Predicate<BallScores>) (x => x.BallType == targetType)).Score;
-        }
+        public int GetScore(EntityType targetType) => ScoresData.Find(x => x.BallType == targetType).Score;
     }
     [Serializable]
     public sealed class BallScores

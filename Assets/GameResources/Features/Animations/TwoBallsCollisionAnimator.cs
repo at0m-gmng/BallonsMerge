@@ -63,7 +63,7 @@ namespace GameResources.Features.Animations
         {
             for (int pairIndex = 0; pairIndex < 3; pairIndex++)
             {
-                var ballPair = new BallPair();
+                BallPair ballPair = new BallPair();
                 _ballPairs.Add(ballPair);
             }
 
@@ -77,7 +77,7 @@ namespace GameResources.Features.Animations
         {
             StopAnimationCycle();
             
-            foreach (var ballPair in _ballPairs)
+            foreach (BallPair ballPair in _ballPairs)
             {
                 DOTween.Kill(ballPair.leftRT);
                 DOTween.Kill(ballPair.rightRT);
@@ -92,15 +92,15 @@ namespace GameResources.Features.Animations
         {
             for (int pairIndex = 0; pairIndex < _ballPairs.Count; pairIndex++)
             {
-                var ballPair = _ballPairs[pairIndex];
+                BallPair ballPair = _ballPairs[pairIndex];
                 
                 GameObject selectedPrefab = _ballPrefabs[Random.Range(0, _ballPrefabs.Count)];
                 
                 if (ballPair.leftRT != null) Destroy(ballPair.leftRT.gameObject);
                 if (ballPair.rightRT != null) Destroy(ballPair.rightRT.gameObject);
                 
-                var leftBall = Instantiate(selectedPrefab, _boundsRect);
-                var rightBall = Instantiate(selectedPrefab, _boundsRect);
+                GameObject leftBall = Instantiate(selectedPrefab, _boundsRect);
+                GameObject rightBall = Instantiate(selectedPrefab, _boundsRect);
                 leftBall.name = $"Ball_Left_{pairIndex}";
                 rightBall.name = $"Ball_Right_{pairIndex}";
 
@@ -121,7 +121,7 @@ namespace GameResources.Features.Animations
 
             Rect boundsRect = _boundsRect.rect;
 
-            foreach (var ballPair in _ballPairs)
+            foreach (BallPair ballPair in _ballPairs)
             {
                 if (ballPair.leftRT == null || ballPair.rightRT == null)
                     continue;
@@ -157,7 +157,7 @@ namespace GameResources.Features.Animations
 
         private void StopAnimationCycle()
         {
-            foreach (var ballPair in _ballPairs)
+            foreach (BallPair ballPair in _ballPairs)
             {
                 ballPair.isRunning = false;
             }
@@ -169,7 +169,7 @@ namespace GameResources.Features.Animations
             AssignTargetsToBallPairs();
             SetupInitialPositions();
 
-            foreach (var ballPair in _ballPairs)
+            foreach (BallPair ballPair in _ballPairs)
             {
                 ballPair.isCollided = false;
                 ballPair.isRunning = true;
@@ -182,11 +182,11 @@ namespace GameResources.Features.Animations
 
         private void AssignTargetsToBallPairs()
         {
-            var availableTargets = _collisionTargets.Where(target => target != null).ToList();
+            List<RectTransform> availableTargets = _collisionTargets.Where(target => target != null).ToList();
             
             if (availableTargets.Count == 0)
             {
-                foreach (var ballPair in _ballPairs)
+                foreach (BallPair ballPair in _ballPairs)
                 {
                     ballPair.currentCollisionPoint = new Vector2(0f, _collisionPointY);
                     ballPair.assignedTarget = null;
@@ -194,11 +194,11 @@ namespace GameResources.Features.Animations
                 return;
             }
 
-            var targetIndices = Enumerable.Range(0, availableTargets.Count).ToList();
+            List<int> targetIndices = Enumerable.Range(0, availableTargets.Count).ToList();
             
             for (int pairIndex = 0; pairIndex < _ballPairs.Count; pairIndex++)
             {
-                var ballPair = _ballPairs[pairIndex];
+                BallPair ballPair = _ballPairs[pairIndex];
                 
                 if (targetIndices.Count > 0)
                 {
@@ -236,7 +236,7 @@ namespace GameResources.Features.Animations
 
             bool allPairsCompleted = true;
 
-            foreach (var ballPair in _ballPairs)
+            foreach (BallPair ballPair in _ballPairs)
             {
                 if (!ballPair.isRunning) 
                 {
@@ -289,11 +289,11 @@ namespace GameResources.Features.Animations
 
         private void AssignNewTargetToPair(BallPair ballPair)
         {
-            var availableTargets = GetAvailableTargets();
+            List<RectTransform> availableTargets = GetAvailableTargets();
             
             if (availableTargets.Count > 0)
             {
-                var newTarget = availableTargets[Random.Range(0, availableTargets.Count)];
+                RectTransform newTarget = availableTargets[Random.Range(0, availableTargets.Count)];
                 ballPair.assignedTarget = newTarget;
                 ballPair.currentCollisionPoint = newTarget.anchoredPosition;
                 ResetPairState(ballPair);
@@ -308,9 +308,9 @@ namespace GameResources.Features.Animations
 
         private List<RectTransform> GetAvailableTargets()
         {
-            var allTargets = _collisionTargets.Where(target => target != null).ToList();
+            List<RectTransform> allTargets = _collisionTargets.Where(target => target != null).ToList();
             
-            var usedTargets = _ballPairs
+            List<RectTransform> usedTargets = _ballPairs
                 .Where(pair => pair.isRunning && pair.assignedTarget != null)
                 .Select(pair => pair.assignedTarget)
                 .ToList();

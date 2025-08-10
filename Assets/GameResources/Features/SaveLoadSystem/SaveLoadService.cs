@@ -36,7 +36,7 @@ namespace GameResources.Features.SaveLoadSystem
             data = JsonUtility.FromJson<T>(Load());
             if (data == null)
             {
-                Debug.LogError($"Data not loaded");
+                Debug.Log($"Data not loaded");
             }
             return data != null;
         }

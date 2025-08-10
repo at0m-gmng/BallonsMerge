@@ -33,9 +33,6 @@ namespace GameResources.Features.GameStates
             _gameStateMachine.Enter<MenuState>();
         }
 
-        public void Exit()
-        {
-            Debug.Log($"Exit {nameof(BootstrapState)}");
-        }
+        public void Exit() => Debug.Log($"Exit {nameof(BootstrapState)}");
     }
 }

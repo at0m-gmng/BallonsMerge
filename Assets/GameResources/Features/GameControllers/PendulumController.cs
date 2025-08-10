@@ -25,6 +25,14 @@ namespace GameResources.Features.GameControllers
         private bool _isInit = false;
         private bool _isDropping = false;
         
+        private void LateUpdate()
+        {
+            if (_isInit && !EventSystem.current.IsPointerOverGameObject() && !_isDropping && Input.GetMouseButtonUp(0))
+            {
+                DropBall().Forget();
+            }
+        }
+        
         public void InitializeController(BallFactory ballsPool)
         {
             _ballsPool = ballsPool;
@@ -37,14 +45,6 @@ namespace GameResources.Features.GameControllers
         public void StartGame() => _isInit = true;
         
         public void StopGame() => _isInit = false;
-
-        private void LateUpdate()
-        {
-            if (_isInit && !EventSystem.current.IsPointerOverGameObject() && !_isDropping && Input.GetMouseButtonUp(0))
-            {
-                DropBall().Forget();
-            }
-        }
         
         private void InitComponents()
         {
@@ -81,9 +81,6 @@ namespace GameResources.Features.GameControllers
             _currentBall.DistanceJoint2D.connectedBody = _pendulumRigidbody;
             _currentBall.DistanceJoint2D.distance = _ropeLength;
             _currentBall.DistanceJoint2D.enabled = true;
-        
-            // ballEntity.IsBelongsZone = null;
-                
             _currentBall.Rigidbody2D.isKinematic = false;
         }
         

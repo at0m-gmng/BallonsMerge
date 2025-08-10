@@ -40,10 +40,7 @@ namespace GameResources.Features.GameStates
             Debug.Log($"Exit {nameof(ResultState)}");
         }
 
-        private void OnRestartButtonClicked()
-        {
-            
-        }
+        private void OnRestartButtonClicked() => _gameStateMachine.Enter<GameState>();
 
         private void OnButtonMenuClicked() => _gameStateMachine.Enter<MenuState>();
     }
