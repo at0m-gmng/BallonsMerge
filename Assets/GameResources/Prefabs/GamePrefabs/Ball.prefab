@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1514903756957262958}
   - component: {fileID: 7299563490190549900}
   m_Layer: 0
-  m_Name: Circle
+  m_Name: Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 9222287420852792218, guid: 7c36d70ead46b614a85d35d0f88cb230, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -190,4 +190,7 @@ MonoBehaviour:
   <DistanceJoint2D>k__BackingField: {fileID: 1514903756957262958}
   <Collider2D>k__BackingField: {fileID: 3134529787257406086}
   spriteRenderer: {fileID: 1658020677884310023}
-  _liveTime: 5
+  _colorSprites:
+  - {fileID: 9222287420852792218, guid: 7c36d70ead46b614a85d35d0f88cb230, type: 3}
+  - {fileID: 4055164687989976081, guid: 7c36d70ead46b614a85d35d0f88cb230, type: 3}
+  - {fileID: -1283422329, guid: 7c36d70ead46b614a85d35d0f88cb230, type: 3}

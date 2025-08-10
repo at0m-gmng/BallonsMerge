@@ -1,4 +1,6 @@
-﻿namespace GameResources.Features.Entities
+﻿using UnityEngine;
+
+namespace GameResources.Features.Entities
 {
     using Core;
     using Zenject;
@@ -6,6 +8,8 @@
 
     public sealed class BallEntity : BaseEntity
     {
+        [SerializeField] private Sprite[] _colorSprites = new Sprite[3];
+        
         public override void Reset() => SetRandomColor();
 
         public override void OnSpawned(IMemoryPool pool)
@@ -16,14 +20,9 @@
 
         private void SetRandomColor()
         {
-            Type = (EntityType)Random.Range(0, 3);
-            spriteRenderer.color = Type switch
-            {
-                EntityType.Red => UnityEngine.Color.red,
-                EntityType.Blue => UnityEngine.Color.blue,
-                EntityType.Green => UnityEngine.Color.green,
-                _ => UnityEngine.Color.white
-            };
+            int randomIndex = Random.Range(0, 3);
+            Type = (EntityType)randomIndex;
+            spriteRenderer.sprite = _colorSprites[randomIndex];
         }
     }
 }
