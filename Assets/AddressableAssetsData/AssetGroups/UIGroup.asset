@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 493bb3a1a26bf4b60a712674ba4ef1e1
+    m_Address: Assets/Casual GUI Kit Mobile/Fonts/LilitaOne-Regular.ttf
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 757efc4518e539f4d9e5f5970a12596d
     m_Address: Assets/GameResources/Prefabs/Windows/Menu_Window.prefab
     m_ReadOnly: 0
@@ -27,6 +32,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7a3ffa84f5e10c247b811244a6ba93dc
     m_Address: Assets/GameResources/Prefabs/Windows/Pause_Window.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 90944887898f0fa40853364657bb096d
+    m_Address: Assets/GameResources/Atlases/Main.spriteatlasv2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
